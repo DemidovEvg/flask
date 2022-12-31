@@ -16,5 +16,5 @@ class Database:
 
         Base.objects = self.db_session.query_property()
 
-        import models  # noqa
+        import project.models as models  # noqa
         Base.metadata.create_all(bind=self.engine)

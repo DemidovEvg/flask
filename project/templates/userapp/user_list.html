@@ -6,7 +6,7 @@
 <li class="list-group-item" aria-disabled="true">
     <h5 class="card-title">{{user.name}}</h5>
     <p class="card-text">{{user.email}}</p>
-    <a href="{{url_for('user.user_detail_view', id=user.id)}}" class="link-primary">К профилю водителя</a>
+    <a href="{{url_for('userapp.user_detail_view', id=user.id)}}" class="link-primary">К профилю водителя</a>
 </li>
 {% endfor %}
 </ul>

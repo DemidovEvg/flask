@@ -9,8 +9,8 @@
         <div class="card-body d-flex flex-column">
         <h5 class="card-title">{{truck.name}}</h5>
         <p class="card-text">{{truck.description[0:50]}}...</p>
-        <a href="{{ url_for('truck.truck_detail_view', id=truck.id) }}" class="btn btn-primary mt-auto">Подробнее</a>
-        <a href="{{ url_for('user.user_detail_view', id=truck.driver.id) }}" class="link-primary">К водителю</a>
+        <a href="{{ url_for('truckapp.truck_detail_view', id=truck.id) }}" class="btn btn-primary mt-auto">Подробнее</a>
+        <a href="{{ url_for('userapp.user_detail_view', id=truck.driver.id) }}" class="link-primary">К водителю</a>
         </div>
     </div>
 </div>  
