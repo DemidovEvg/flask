@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h5 class="card-title">Авторизация</h5>
+<div class="box">
+    <form method="POST" action="">
+        <div class="field">
+            <label for="email">Почта:
+                <input class="form-control" type="email" name="email" autofocus="">
+            </label>
+        </div>
+
+        <div class="field">
+            <label for="email">Пароль:
+                <input class="form-control" type="password" name="password">
+            </label>
+        </div>
+        <input type="hidden" name="next" value="{{next}}" />
+        <button class="btn btn-primary mt-2">Войти</button>
+    </form>
+</div>
+{% endblock content %}
