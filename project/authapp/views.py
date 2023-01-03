@@ -1,10 +1,11 @@
 import flask
-from flask import g, redirect, url_for
+from flask import redirect, url_for
 from flask_login import login_required, login_user, logout_user
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from werkzeug.security import check_password_hash
 from project.models import User
+from project.database import db
 
 auth_blueprint = flask.Blueprint(
     name='authapp',
@@ -22,7 +23,7 @@ def login_view():
         email = request.form.get("email")
         password = request.form.get("password")
 
-        session: Session = g.session
+        session: Session = db.session
         currrent_user = (session.query(User)
                                 .filter(func.lower(User.email) == func.lower(email))
                                 .one_or_none())

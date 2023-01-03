@@ -1,8 +1,9 @@
-from flask import Blueprint, g
+from flask import Blueprint
 from flask import render_template
 from sqlalchemy import select
 from project.models import User
 from project.utils.plural_word import plural_word
+from project.database import db
 
 user_blueprint = Blueprint(
     name='userapp',
@@ -14,13 +15,11 @@ user_blueprint = Blueprint(
 
 @user_blueprint.route('/', endpoint='user_list_view')
 def user_list_view():
-    query = select(User)
-    users = g.session.execute(query).all()
-    users = [user[0] for user in users]
+    users = db.session.query(User).all()
     return render_template('userapp/user_list.html', users=users)
 
 
 @user_blueprint.route('/<int:id>', endpoint='user_detail_view')
 def user_detail_view(id):
-    user = g.session.query(User).filter(User.id == id).one()
+    user = db.session.query(User).filter(User.id == id).one()
     return render_template('userapp/user_detail.html', user=user, plural_word=plural_word)
