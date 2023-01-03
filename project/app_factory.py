@@ -3,7 +3,7 @@ import os
 from flask import Flask, redirect, url_for, g
 from flask_login import LoginManager
 from sqlalchemy.orm import Session
-from project.database import Database
+from project.database import db, migrate
 from project.models import User
 from project.userapp.views import user_blueprint
 from project.truckapp.views import truck_blueprint
@@ -23,8 +23,8 @@ def attach_login_manager(func):
 
         @login_manager.user_loader
         def load_user(user_id):
-            session: Session = g.session
-            return session.query(User).filter_by(id=user_id).one()
+            session: Session = db.session
+            return session.query(User).filter_by(id=user_id).one_or_none()
 
         return app
     return inner
@@ -33,28 +33,16 @@ def attach_login_manager(func):
 @attach_login_manager
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        SECRET_KEY='dev'
-    )
 
     if test_config is None:
         app.config.from_pyfile('config.py')
     else:
         app.config.from_mapping(test_config)
 
-    # print(f'{app.instance_path=}')
-    # print(f'{app.config=}')
-
     try:
         os.makedirs(app.instance_path)
     except OSError:
         pass
-
-    @app.before_request
-    def stick_session():
-        db = Database()
-        session = db.db_session
-        g.session = session
 
     @app.route('/')
     def start_view():
@@ -63,6 +51,9 @@ def create_app(test_config=None):
     app.register_blueprint(user_blueprint)
     app.register_blueprint(truck_blueprint)
     app.register_blueprint(auth_blueprint)
+
+    db.init_app(app)
+    migrate.init_app(app, db)
 
     register_commands(app)
 

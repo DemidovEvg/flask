@@ -1,0 +1,39 @@
+version: '3.4'
+
+services:
+  flask:
+    image: flask
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: [
+      "sh", "-c", "./wait-for-postgres.sh
+      && python -m flask db upgrade
+      && python -m flask fill-db
+      && pip install debugpy -t /tmp 
+      && python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 -m 
+         flask run --no-debugger --no-reload --host 0.0.0.0 --port 5002"
+      ]
+    ports:
+      - 5002:5002
+      - 5678:5678
+    environment:
+      POSTGRES_SERVICE_NAME: pg
+      POSTGRES_DB: postrges
+      POSTGRES_USER: demidov
+      POSTGRES_PASSWORD: 123
+      FLASK_APP: wsgi.py
+    depends_on:
+      - pg
+
+  pg:
+    image: postgres:15.1
+    environment:
+      POSTGRES_DB: postrges
+      POSTGRES_USER: demidov
+      POSTGRES_PASSWORD: 123
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - I:/python/db:/var/lib/postgresql/data/pgdata
+    ports:
+      - 5432:5432

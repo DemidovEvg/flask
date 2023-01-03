@@ -1,18 +1,23 @@
 import random
 from flask import Flask
 from werkzeug.security import generate_password_hash
-from project.database import Database
+from project.database import db
 from project.models import User, Truck
 
 
 def register_commands(app: Flask):
-    @app.cli.command("init-db")
-    def init_db():
-        db = Database()
-        session = db.db_session
+    @app.cli.command("fill-db")
+    def fill_db():
+        session = db.session
         names = ['Ivanov', 'Petrov', 'Sidorov']
         new_users = []
         for i, current_name in enumerate(names):
+            query_user_exists = (session.query(User)
+                                        .filter(User.name == current_name)
+                                        .exists())
+
+            if session.query(query_user_exists).scalar():
+                return
             new_users.append(
                 User(
                     name=current_name,
