@@ -1,0 +1,19 @@
+{% macro pretty_field(field) %}
+<div class="row my-3">
+    {% if field.flags.hidden %}
+    {{ field }}
+    {% else %}
+    {{ field.label(class="form-label") }}
+    <div class="col-sm-8 col-md-6">
+        {{ field(class="form-control" + (" is-invalid" if field.errors else ""))|safe }}
+        {% if field.errors %}
+        {% for error in field.errors %}
+        <div class="invalid-feedback">
+            {{ error }}
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endmacro %}
