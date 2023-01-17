@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% from "macro/pretty_field.html" import pretty_field %}
+
+{% block content %}
+<h5 class="card-title mt-2">Создать маршрут</h5>
+<div class="box">
+    <form method="POST" action="">
+        {{ form.csrf_token() }}
+        {% for field in form %}
+        {{ pretty_field(field) }}
+        {% endfor %}
+        <button class="btn btn-primary mt-2">Создать</button>
+    </form>
+</div>
+{% endblock content %}

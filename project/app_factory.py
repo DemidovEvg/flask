@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 
 from flask import Flask, redirect, url_for, jsonify
 from flask_swagger import swagger
@@ -11,6 +12,8 @@ from project.userapp.views import user_blueprint
 from project.truckapp.views import truck_blueprint
 from project.authapp.views import auth_blueprint
 from project.commands import register_commands
+
+load_dotenv()
 
 
 @attach_flask_bcrypt
