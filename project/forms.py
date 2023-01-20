@@ -91,7 +91,7 @@ class TripForm(FlaskForm):
         widget=DateTimeLocalInput(),
         validators=[validators.DataRequired()]
     )
-    product_id = fields.SelectField(
+    product_id = fields.SelectMultipleField(
         label='Товар',
         coerce=int,
         validators=[validators.InputRequired()]
@@ -156,8 +156,14 @@ class TripForm(FlaskForm):
         data = {}
         for name, field in self._fields.items():
             data[name] = field.data
-        data = Trip.filter_fields(data)
-        current_trip = Trip(**data)
+        data_filtered = Trip.filter_fields(data)
+        current_trip = Trip(**data_filtered)
+
         session.add(current_trip)
+        session.flush()
+        product_ids = data['product_id']
+        products = session.query(Product).where(Product.id.in_(product_ids))
+        [current_trip.products.append(p) for p in products]
         session.commit()
+
         return current_trip

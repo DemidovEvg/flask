@@ -51,12 +51,13 @@ def trip_list_view():
     arrival = aliased(Place)
     trip_pagination = (
         session.query(Trip)
-        .order_by(Trip.departure_at)
-        .join(Trip.truck)
-        .join(Trip.product)
-        .join(departure, departure.id == Trip.departure_place_id)
-        .join(arrival, arrival.id == Trip.arrival_place_id)
-        .paginate(page=current_page, per_page=5))
+               .order_by(Trip.departure_at)
+               .join(Trip.truck)
+               .join(Trip.products)
+               .join(departure, departure.id == Trip.departure_place_id)
+               .join(arrival, arrival.id == Trip.arrival_place_id)
+               .paginate(page=current_page, per_page=5)
+    )
     return render_template('truckapp/trip_list.html', trip_pagination=trip_pagination)
 
 
@@ -64,10 +65,8 @@ def trip_list_view():
 @login_required
 def trip_create():
     error = None
-    print(request.form)
     form = TripForm(request.form)
     if request.method == "POST" and form.validate_on_submit():
-        print(form)
         try:
             form.save()
         except Exception:

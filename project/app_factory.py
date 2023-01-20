@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 from flask import Flask, redirect, url_for, jsonify
 from flask_swagger import swagger
 from flask_sqlalchemy import SQLAlchemy
-from project.logger import logger_config  # noqa
 from project.database import db, migrate
 from project.extensions import attach_login_manager, attach_flask_bcrypt
 from project.serializers import ma as marshmallow_alchemy

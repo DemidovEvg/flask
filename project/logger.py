@@ -1,3 +1,4 @@
+import logging
 from logging.config import dictConfig
 from pathlib import Path
 
@@ -18,8 +19,16 @@ logger_config = dictConfig({
             'formatter': 'default'
         },
     },
-    'root': {
-        'level': 'INFO',
-        'handlers': ['file', 'console']
+    'loggers': {
+        'root': {
+            'level': 'INFO',
+            'handlers': ['file', 'console']
+        },
+        'sqlalchemy.engine': {
+            'level': 'INFO',
+            'handlers': ['console'],
+            'propagate': False
+        }
     }
 })
+logging.getLogger('werkzeug').handlers = []

@@ -88,6 +88,20 @@ class Truck(db.Model):
         return self.name
 
 
+trip_product_associations_table = sa.Table(
+    'trip_product_associations',
+    db.metadata,
+    sa.Column('trip_id',
+              sa.Integer,
+              sa.ForeignKey('trip.id'),
+              nullable=False),
+    sa.Column('product_id',
+              sa.Integer,
+              sa.ForeignKey('product.id'),
+              nullable=False)
+)
+
+
 class Trip(db.Model):
     __tablename__ = 'trip'
     id = sa.Column(sa.Integer, primary_key=True)
@@ -111,13 +125,18 @@ class Trip(db.Model):
     )
     departure_at = sa.Column(sa.DateTime, nullable=True)
     arrival_at = sa.Column(sa.DateTime, nullable=True)
-    product_id = sa.Column(sa.Integer, sa.ForeignKey('product.id'))
-    product = relationship('Product', back_populates='trips')
+    products = relationship(
+        'Product',
+        secondary=trip_product_associations_table,
+        back_populates='trips'
+    )
 
     @classmethod
     def filter_fields(cls, fields: dict[str, Any]) -> dict[str, Any]:
         mapper = inspect(cls)
-        keys = [c.key for c in mapper.attrs]
+
+        properties = [p for p in mapper.attrs]
+        keys = [p.key for p in properties]
         new_fields = {}
         for name, value in fields.items():
             if name in keys:
@@ -129,7 +148,11 @@ class Product(db.Model):
     __tablename__ = 'product'
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.String(50), unique=True, index=True)
-    trips = relationship('Trip', back_populates='product')
+    trips = relationship(
+        'Trip',
+        secondary=trip_product_associations_table,
+        back_populates='products'
+    )
 
 
 class Place(db.Model):
