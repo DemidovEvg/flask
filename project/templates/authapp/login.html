@@ -4,6 +4,9 @@
 {% block content %}
 <h5 class="card-title mt-2">Авторизация</h5>
 <div class="box">
+    {% if current_user.is_authenticated %}
+    <a class="btn btn-primary mt-2" href="{{ url_for('authapp.logout_view') }}">Войти под другим пользователем</a>
+    {% else %}
     <form method="POST" action="">
         {{ form.csrf_token() }}
         {% for field in form %}
@@ -11,5 +14,6 @@
         {% endfor %}
         <button class="btn btn-primary mt-2">Войти</button>
     </form>
+    {% endif %}
 </div>
 {% endblock content %}

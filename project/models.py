@@ -154,6 +154,9 @@ class Product(db.Model):
         back_populates='products'
     )
 
+    def __str__(self):
+        return self.name
+
 
 class Place(db.Model):
     __tablename__ = 'place'
@@ -169,3 +172,6 @@ class Place(db.Model):
         back_populates='arrival_place',
         foreign_keys=[Trip.arrival_place_id]
     )
+
+    def __str__(self):
+        return self.name

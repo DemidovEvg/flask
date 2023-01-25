@@ -4,7 +4,7 @@ from flask_login import (
     login_required,
     login_user,
     logout_user,
-    current_user as auto_current_user
+    current_user
 )
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
@@ -57,14 +57,14 @@ def profile_view():
 @auth_blueprint.route("/register", methods=["GET", "POST"])
 def register_view():
     current_app.logger.info("Enter to register_view")
-    if auto_current_user.is_authenticated:
+    if current_user.is_authenticated:
         return redirect("truckapp.truck_list_view")
 
     error = None
     form = RegistrationForm(request.form)
     if request.method == "POST" and form.validate_on_submit():
-        current_user = User.get_user(form.email.data)
-        if current_user:
+        current_user_login = User.get_user(form.email.data)
+        if current_user_login:
             form.email.errors.append(
                 "Пользователь с данной почтой уже существует!"
             )

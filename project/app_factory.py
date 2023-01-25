@@ -11,6 +11,7 @@ from project.userapp.views import user_blueprint
 from project.truckapp.views import truck_blueprint
 from project.authapp.views import auth_blueprint
 from project.commands import register_commands
+from project.admin import admin
 
 load_dotenv()
 
@@ -34,6 +35,7 @@ def create_app(test_config=None):
     register_db(app, db)
     marshmallow_alchemy.init_app(app)
     register_commands(app)
+    admin.init_app(app)
 
     # ==========================
     # Общие вьюхи
