@@ -3,3 +3,5 @@ __pycache__
 commands.md
 *.sqlite
 env
+pydantic_example.py
+**/*.log

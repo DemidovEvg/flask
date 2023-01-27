@@ -29,17 +29,31 @@
                 </a>
             </li>
             <li class="nav-item">
+                {% set current_view = 'truckapp.trip_list_view' %}
+                <a class="nav-link {% if current_view==request.url_rule.endpoint %}active{% endif %}" 
+                    href="{{ url_for(current_view) }}">
+                Trips
+                </a>
+            </li>
+            <li class="nav-item">
             {% if current_user.is_authenticated %}
                 {% set current_view = 'authapp.logout_view' %}
                 <a class="nav-link {% if current_view==request.url_rule.endpoint %}active{% endif %}" 
                     href="{{ url_for(current_view) }}">
-                Выйти
+                Выйти ({{ current_user.username }})
             </a>
             {% else %}
                 {% set current_view = 'authapp.login_view' %}
                 <a class="nav-link {% if current_view==request.url_rule.endpoint %}active{% endif %}"
                     href="{{ url_for(current_view) }}">
                     Войти
+                </a>
+                </li>
+                <li class="nav-item">
+                {% set current_view = 'authapp.register_view' %}
+                <a class="nav-link {% if current_view==request.url_rule.endpoint %}active{% endif %}"
+                    href="{{ url_for(current_view) }}">
+                    Регистрация
                 </a>
             {% endif %}
             </li>
@@ -53,9 +67,11 @@
             </li>
             {% endif %}
             </ul>
+
         </div>
         </div>
     </nav>
+    
     {% endblock menu %}
 
     {% block messages %}
