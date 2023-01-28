@@ -2,13 +2,12 @@ import flask
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required
 from flask import current_app
-from flask_sqlalchemy.pagination import Pagination
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session, aliased
 from sqlalchemy.orm.exc import NoResultFound
-from project.models import Truck, Trip, Product, Place
+from project.models import Truck, Trip, Place
 from project.database import db
-from project.serializers import TruckSchema
 from project.forms import TripForm
 
 session: Session = db.session
@@ -19,8 +18,6 @@ truck_blueprint = Blueprint(
     static_folder='../static',
     url_prefix='/trucks'
 )
-
-truck_schema = TruckSchema()
 
 
 @truck_blueprint.route('/')
@@ -75,19 +72,3 @@ def trip_create():
         else:
             return redirect(url_for("truckapp.trip_list_view"))
     return flask.render_template("truckapp/trip_create.html", form=form, error=error)
-
-
-@truck_blueprint.route('/api', endpoint='truck_list_api')
-def truck_list_api():
-    all_trucks = session.query(Truck).all()
-    return truck_schema.dump(all_trucks, many=True)
-
-
-@truck_blueprint.route('/api/<int:id>', endpoint='truck_detail_api')
-def truck_detail_api(id):
-    try:
-        truck = session.query(Truck).filter(Truck.id == id).one()
-    except NoResultFound as exc:
-        current_app.logger.error(exc)
-        raise
-    return truck_schema.dump(truck)
