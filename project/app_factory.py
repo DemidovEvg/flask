@@ -6,10 +6,10 @@ from flask_swagger import swagger
 from flask_sqlalchemy import SQLAlchemy
 from project.database import db, migrate
 from project.extensions import attach_login_manager, attach_flask_bcrypt
-from project.serializers import ma as marshmallow_alchemy
 from project.userapp.views import user_blueprint
 from project.truckapp.views import truck_blueprint
 from project.authapp.views import auth_blueprint
+from project.apiapp import api
 from project.commands import register_commands
 from project.admin import admin
 
@@ -33,9 +33,9 @@ def create_app(test_config=None):
 
     register_blueprints(app)
     register_db(app, db)
-    marshmallow_alchemy.init_app(app)
     register_commands(app)
     admin.init_app(app)
+    api.init_api(app)
 
     # ==========================
     # Общие вьюхи
