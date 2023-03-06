@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{request.url_rule.endpoint}}</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+    {% block menu %}
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+        <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                {% set current_view = 'userapp.user_list_view' %}
+                <a class="nav-link {% if current_view==request.url_rule.endpoint %}active{% endif %}"
+                    href="{{ url_for(current_view) }}">
+                    Users
+                </a>
+            </li>
+            <li class="nav-item">
+                {% set current_view = 'truckapp.truck_list_view' %}
+                <a class="nav-link {% if current_view==request.url_rule.endpoint %}active{% endif %}" 
+                    href="{{ url_for(current_view) }}">
+                Trucks
+                </a>
+            </li>
+            <li class="nav-item">
+                {% set current_view = 'truckapp.trip_list_view' %}
+                <a class="nav-link {% if current_view==request.url_rule.endpoint %}active{% endif %}" 
+                    href="{{ url_for(current_view) }}">
+                Trips
+                </a>
+            </li>
+            <li class="nav-item">
+            {% if current_user.is_authenticated %}
+                {% set current_view = 'authapp.logout_view' %}
+                <a class="nav-link {% if current_view==request.url_rule.endpoint %}active{% endif %}" 
+                    href="{{ url_for(current_view) }}">
+                Выйти ({{ current_user.username }})
+            </a>
+            {% else %}
+                {% set current_view = 'authapp.login_view' %}
+                <a class="nav-link {% if current_view==request.url_rule.endpoint %}active{% endif %}"
+                    href="{{ url_for(current_view) }}">
+                    Войти
+                </a>
+                </li>
+                <li class="nav-item">
+                {% set current_view = 'authapp.register_view' %}
+                <a class="nav-link {% if current_view==request.url_rule.endpoint %}active{% endif %}"
+                    href="{{ url_for(current_view) }}">
+                    Регистрация
+                </a>
+            {% endif %}
+            </li>
+            {% if current_user.is_authenticated %}
+            <li class="nav-item">
+                {% set current_view = 'authapp.profile_view' %}
+                <a class="nav-link {% if current_view==request.url_rule.endpoint %}active{% endif %}"
+                    href="{{ url_for(current_view) }}">
+                    {{ current_user.name }}
+                </a>
+            </li>
+            {% endif %}
+            </ul>
+
+        </div>
+        </div>
+    </nav>
+    
+    {% endblock menu %}
+
+    {% block messages %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="mt-2">
+            {% for category, message in messages %}
+                <div class="alert {{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+
+    {% endblock messages %}
+    {% block content %}
+    {% endblock content %}
+</div>
+<script src="{{ url_for('static', filename='js/bootstrap.bundle.js') }}"></script>
+</body>
+</html>

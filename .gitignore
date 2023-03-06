@@ -1,0 +1,7 @@
+__pycache__
+.vscode
+commands.md
+*.sqlite
+env
+pydantic_example.py
+**/*.log

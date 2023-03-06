@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+<div class="col-12">
+    <h5 class="card-title">{{truck.name}}</h5>
+    <div class="row">
+    <div class="col-8">
+        <img src="{{url_for('static', filename=truck.image_path)}}" class="card-img-top">
+    </div>
+    <div class="col-4">
+        <p class="card-text">{{truck.description}}</p>
+    </div>
+</div>
+</div>  
+</div>
+{% endblock content %}

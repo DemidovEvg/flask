@@ -1,0 +1,26 @@
+version: '3.4'
+
+services:
+  flask:
+    image: flask
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 5002:5002
+    environment:
+      - FLASK_APP=wsgi.py
+    depends_on:
+      - pg
+
+  pg:
+    image: postgres:15.1
+    environment:
+      POSTGRES_DB: postrges
+      POSTGRES_USER: demidov
+      POSTGRES_PASSWORD: 123
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - I:/python/db:/var/lib/postgresql/data/pgdata
+    ports:
+      - 5432:5432

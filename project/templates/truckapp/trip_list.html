@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% from "macro/pagination.html" import render_pagination %}
+
+{% block content %}
+<div class="row">
+<div class="col">
+    <a class="btn btn-primary my-2" href="{{ url_for('truckapp.trip_create') }}">
+        Создать новый маршрут
+    </a>
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">N</th>
+        <th scope="col">id</th>
+        <th scope="col">Грузовик</th>
+        <th scope="col">Место отправления</th>
+        <th scope="col">Время отправления</th>
+        <th scope="col">Место прибытия</th>
+        <th scope="col">Время прибытия</th>
+        <th scope="col">Товар</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for trip in trip_pagination.items %}
+      <tr>
+        <th scope="row">{{ loop.index }}</th>
+        <td>{{ trip.id }}</td>
+        <td>{{ trip.truck.name }}</td>
+        <td>{{ trip.departure_place.name }}</td>
+        <td>{{ trip.departure_at.strftime('%d-%m-%Y %H:%M') }}</td>
+        <td>{{ trip.arrival_place.name }}</td>
+        <td>{{ trip.arrival_at.strftime('%d-%m-%Y %H:%M') }}</td>
+        <td>
+          {% for product in trip.products %}
+          {{ product.name }}
+            {% if not loop.last %}
+              ,
+            {% endif %}
+          {% endfor %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+</table> 
+{{ render_pagination(trip_pagination, request.url_rule.endpoint) }}
+</div>
+
+</div>
+{% endblock content %}
